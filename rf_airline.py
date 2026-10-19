@@ -1,6 +1,7 @@
 ﻿import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import joblib
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -14,8 +15,10 @@ df = df.drop(columns=["Unnamed: 0", "id"], errors="ignore")
 print("Shape:", df.shape)
 print("\nTarget distribution:\n", df["satisfaction"].value_counts())
 
+arrival_delay_median = df["Arrival Delay in Minutes"].median()
+
 df["Arrival Delay in Minutes"] = df["Arrival Delay in Minutes"].fillna(
-    df["Arrival Delay in Minutes"].median()
+    arrival_delay_median
 )
 
 # ---------- 2. Encode ----------
@@ -39,6 +42,18 @@ print("\nTrain:", X_train.shape, "Test:", X_test.shape)
 rf = RandomForestClassifier(n_estimators=200, random_state=42, n_jobs=-1)
 rf.fit(X_train, y_train)
 print("\nModel trained")
+
+# Save the trained model and information needed for predictions
+joblib.dump(
+    {
+        "model": rf,
+        "feature_columns": X.columns.tolist(),
+        "arrival_delay_median": arrival_delay_median
+    },
+    "airline_rf_model.joblib"
+)
+
+print("Model saved as airline_rf_model.joblib")
 
 # ---------- 4. Evaluate ----------
 y_pred = rf.predict(X_test)

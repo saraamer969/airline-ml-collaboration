@@ -1,0 +1,222 @@
+
+<div class="page">
+  <header class="hero">
+    <div class="brand">AIRLINE ANALYTICS</div>
+    <h1>Passenger Satisfaction Predictor</h1>
+    <p>Explore how passenger experience and flight details relate to satisfaction.</p>
+    <div class="model-tag">Random Forest Machine Learning Model</div>
+  </header>
+
+  <main class="layout">
+    <form class="panel" (ngSubmit)="predictSatisfaction()">
+      <h2>Passenger Details</h2>
+      <p class="muted">Enter the passenger and flight information below.</p>
+
+      <h3>Passenger Information</h3>
+      <div class="form-grid">
+        <label>
+          Gender
+          <select name="gender" [(ngModel)]="passenger['Gender']">
+            <option>Female</option>
+            <option>Male</option>
+          </select>
+        </label>
+
+        <label>
+          Customer Type
+          <select name="customerType" [(ngModel)]="passenger['Customer Type']">
+            <option>Loyal Customer</option>
+            <option>disloyal Customer</option>
+          </select>
+        </label>
+
+        <label>
+          Age
+          <input name="age" type="number" min="1" max="120"
+            [(ngModel)]="passenger['Age']" required />
+        </label>
+
+        <label>
+          Type of Travel
+          <select name="travelType" [(ngModel)]="passenger['Type of Travel']">
+            <option>Business travel</option>
+            <option>Personal Travel</option>
+          </select>
+        </label>
+
+        <label>
+          Travel Class
+          <select name="travelClass" [(ngModel)]="passenger['Class']">
+            <option>Business</option>
+            <option>Eco</option>
+            <option>Eco Plus</option>
+          </select>
+        </label>
+
+        <label>
+          Flight Distance
+          <input name="distance" type="number" min="0"
+            [(ngModel)]="passenger['Flight Distance']" required />
+        </label>
+      </div>
+
+      <h3>Passenger Ratings</h3>
+      <p class="muted">Use the rating scale from 0 to 5, as represented in the dataset.</p>
+
+      <div class="form-grid">
+        <label>
+          Inflight Wi-Fi Service
+          <input name="wifi" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Inflight wifi service']" required />
+        </label>
+
+        <label>
+          Departure/Arrival Time Convenience
+          <input name="timeConvenience" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Departure/Arrival time convenient']" required />
+        </label>
+
+        <label>
+          Ease of Online Booking
+          <input name="booking" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Ease of Online booking']" required />
+        </label>
+
+        <label>
+          Gate Location
+          <input name="gate" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Gate location']" required />
+        </label>
+
+        <label>
+          Food and Drink
+          <input name="food" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Food and drink']" required />
+        </label>
+
+        <label>
+          Online Boarding
+          <input name="boarding" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Online boarding']" required />
+        </label>
+
+        <label>
+          Seat Comfort
+          <input name="seat" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Seat comfort']" required />
+        </label>
+
+        <label>
+          Inflight Entertainment
+          <input name="entertainment" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Inflight entertainment']" required />
+        </label>
+
+        <label>
+          On-board Service
+          <input name="onboard" type="number" min="0" max="5"
+            [(ngModel)]="passenger['On-board service']" required />
+        </label>
+
+        <label>
+          Leg Room Service
+          <input name="legroom" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Leg room service']" required />
+        </label>
+
+        <label>
+          Baggage Handling
+          <input name="baggage" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Baggage handling']" required />
+        </label>
+
+        <label>
+          Check-in Service
+          <input name="checkin" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Checkin service']" required />
+        </label>
+
+        <label>
+          Inflight Service
+          <input name="inflight" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Inflight service']" required />
+        </label>
+
+        <label>
+          Cleanliness
+          <input name="cleanliness" type="number" min="0" max="5"
+            [(ngModel)]="passenger['Cleanliness']" required />
+        </label>
+      </div>
+
+      <h3>Flight Delays</h3>
+      <div class="form-grid">
+        <label>
+          Departure Delay (minutes)
+          <input name="departureDelay" type="number" min="0"
+            [(ngModel)]="passenger['Departure Delay in Minutes']" required />
+        </label>
+
+        <label>
+          Arrival Delay (minutes)
+          <input name="arrivalDelay" type="number" min="0"
+            [(ngModel)]="passenger['Arrival Delay in Minutes']" required />
+        </label>
+      </div>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Predicting...' : 'Predict Satisfaction' }}
+      </button>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </form>
+
+    <aside class="panel result-panel">
+      <div class="result-icon">✦</div>
+      <h2>Prediction Results</h2>
+      <p class="muted">Your model's prediction will appear here.</p>
+
+      <div *ngIf="result" class="result-content">
+        <p class="result-label">Predicted Satisfaction</p>
+        <h3 class="prediction"
+          [class.satisfied]="result.prediction === 1"
+          [class.dissatisfied]="result.prediction === 0">
+          {{ result.satisfaction }}
+        </h3>
+
+        <div class="probability">
+          <div class="probability-heading">
+            <span>Satisfied</span>
+            <strong>{{ (result.probabilities.satisfied * 100).toFixed(1) }}%</strong>
+          </div>
+          <div class="track">
+            <div class="fill satisfied-fill"
+              [style.width.%]="result.probabilities.satisfied * 100"></div>
+          </div>
+        </div>
+
+        <div class="probability">
+          <div class="probability-heading">
+            <span>Neutral or dissatisfied</span>
+            <strong>{{ (result.probabilities.neutral_or_dissatisfied * 100).toFixed(1) }}%</strong>
+          </div>
+          <div class="track">
+            <div class="fill dissatisfied-fill"
+              [style.width.%]="result.probabilities.neutral_or_dissatisfied * 100"></div>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          These are model-estimated probabilities, not guaranteed outcomes.
+        </p>
+      </div>
+
+      <div *ngIf="!result && !loading" class="empty-state">
+        <p>Complete the passenger form and select <strong>Predict Satisfaction</strong>
+          to see the results.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>Airline Passenger Satisfaction Prediction · Academic ML Project</footer>
+</div>

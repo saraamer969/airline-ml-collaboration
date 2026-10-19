@@ -1,48 +1,39 @@
-# Airline Machine Learning Project
+@"
+# Airline Passenger Satisfaction Prediction
 
-## Project Description
+A machine learning web application that predicts whether an airline passenger is likely to be satisfied or neutral/dissatisfied.
 
-This project applies machine learning techniques to an airline-related dataset.
-The project contains implementations using Decision Tree and Random Forest models.
+## Features
 
-## Dataset
+- Random Forest classification model
+- Data preprocessing and model evaluation
+- Feature importance visualizations
+- Flask REST API for predictions
+- Angular frontend with a passenger input form
+- Prediction probabilities displayed in the interface
 
-The dataset used in this project is stored locally as `train.csv`.
+## Technologies
 
-Dataset source:
-[Add your dataset source/link here]
+- Python, pandas, NumPy, scikit-learn
+- Flask and Flask-CORS
+- Angular, TypeScript, HTML, CSS
+- Git and GitHub
 
-The dataset is not included in the GitHub repository.
+## Project Structure
 
-## Machine Learning Models
+- rf_airline.py: trains and evaluates the Random Forest model
+- backend/app.py: Flask prediction API
+- test_api.py: API testing script
+- airline-frontend/: Angular frontend
+- train.csv: local training dataset
+- requirements.txt: Python dependencies
+- .gitignore: files excluded from Git
 
-- Decision Tree
-- Random Forest
+## Setup
 
-## Evaluation
+### 1. Install Python dependencies
 
-The models are evaluated using the metrics implemented in the existing project code.
-
-The project also contains visual outputs such as:
-- Model results
-- Feature importance
-- Decision tree visualization
-
-## Project Files
-
-- `dt_airline.py` — Decision Tree model
-- `rf_airline.py` — Random Forest model
-- `dt_results.png` — Decision Tree results
-- `dt_feature_importance.png` — Decision Tree feature importance
-- `dt_tree.png` — Decision Tree visualization
-- `feature_importance.png` — Random Forest feature importance
-- `results.png` — Model results
-- `requirements.txt` — Python dependencies
-- `.gitignore` — Files excluded from Git tracking
-
-## How to Run
-
-Install the required Python packages:
+From the project root:
 
 ```bash
 pip install -r requirements.txt

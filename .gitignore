@@ -16,3 +16,4 @@ train.csv
 
 # VS Code settings
 .vscode/
+airline_rf_model.joblib
