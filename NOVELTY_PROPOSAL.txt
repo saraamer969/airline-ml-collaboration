@@ -1,0 +1,62 @@
+PROJECT NOVELTY PROPOSAL
+Airline Passenger Satisfaction Prediction
+
+Proposed Title
+An Explainable and Confidence-Aware Airline Passenger Satisfaction Prediction System with Actionable Service Improvement Recommendations
+
+1. Background and Problem
+The current project uses a Random Forest classifier to predict whether an airline passenger is satisfied or neutral/dissatisfied. The model achieves 96.24% accuracy and a ROC-AUC of 0.994 on the current test split. However, a prediction alone does not explain why the model reached that result, how certain the prediction is, or which service ratings could be explored for possible improvement.
+
+2. Proposed Novelty
+The proposed extension combines three capabilities in one airline satisfaction application:
+
+A. Individual Prediction Explanation
+Use SHAP (Shapley Additive exPlanations) to explain which input features contribute most to an individual prediction. The interface will show the main factors supporting the prediction and the factors pushing it in the opposite direction, where supported by the explanation.
+
+B. Confidence-Aware Prediction
+Show the model's predicted class and predicted class probabilities. Use a validation-set-selected threshold to flag cases where the model is insufficiently confident for straightforward interpretation. The threshold must be chosen using validation data, not selected after examining the final test results. Predicted probabilities should not automatically be treated as perfectly calibrated confidence.
+
+C. What-If Service Improvement Simulator
+Allow the user to change selected service ratings, such as online boarding, inflight Wi-Fi service, seat comfort, or inflight entertainment, and compare the model's predicted satisfaction probability before and after the change. The application can identify changes associated with the largest predicted probability increase, subject to reasonable rating ranges and constraints.
+
+Important limitation: these are model-based what-if simulations, not proof of causal effects. The system must not claim that changing a service rating will definitely cause a real passenger to become satisfied.
+
+3. Proposed Workflow
+1. Receive passenger details through the web application.
+2. Apply the same preprocessing and feature order used during model training.
+3. Generate the Random Forest prediction and class probabilities.
+4. Use SHAP to explain the individual prediction.
+5. Check whether the prediction meets the confidence rule established using validation data.
+6. Let the user explore feasible changes to selected service ratings.
+7. Display the original prediction, simulated prediction, probability difference, and explanation.
+8. Clearly label simulated results as estimates from the trained model.
+
+4. Research Questions
+RQ1: How accurately does the Random Forest model predict airline passenger satisfaction on a held-out test set?
+RQ2: Which features contribute most to individual satisfaction predictions, and are these explanations consistent with the model's overall feature-importance results?
+RQ3: How does a confidence-aware review rule affect the coverage and error rate of predictions that are not flagged for review?
+RQ4: How much do predicted satisfaction probabilities change under feasible what-if changes to selected service ratings?
+
+5. Experimental Evaluation
+- Establish a baseline using the existing Random Forest model.
+- Report accuracy, precision, recall, F1-score, ROC-AUC, and a confusion matrix on held-out test data.
+- Use SHAP explanations for selected individual cases and compare local explanations with global feature importance.
+- Select any confidence threshold using validation data, then report the percentage of cases flagged for review and the error rate among unflagged cases.
+- Evaluate what-if scenarios on held-out examples and report the change in predicted probability. Do not present these simulations as causal evidence.
+- Keep the test set separate from threshold selection and model tuning to reduce evaluation bias.
+
+6. Expected Contribution
+The project will extend a standard prediction application into an explainable decision-support prototype. It will aim to make individual predictions easier to interpret, identify cases that warrant additional review, and let users investigate model-estimated outcomes under alternative service-rating scenarios.
+
+7. Implementation Scope
+- Existing model: Random Forest classifier.
+- Backend: Flask API.
+- Frontend: Angular application.
+- Explanation: SHAP.
+- Additional interface: prediction explanation, review flag, and what-if controls for selected service ratings.
+- Preserve the existing baseline and compare the enhanced system against it.
+
+8. Claims and Limitations
+This proposal is a planned contribution, not a completed or proven novelty claim. Before describing it as novel in a research report, review recent related work to determine whether the same combination has already been proposed. SHAP explains model behavior but does not establish causation. What-if outputs depend on the training data and model assumptions, and should not be interpreted as guaranteed real-world outcomes.
+
+
